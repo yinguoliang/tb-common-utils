@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svn/tb-common-utils/!svn/ver/14/trunk/tbnet
+END
+configure.ac
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/tb-common-utils/!svn/ver/2/trunk/tbnet/configure.ac
+END
+AUTHORS
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/tb-common-utils/!svn/ver/2/trunk/tbnet/AUTHORS
+END
+ChangeLog
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/tb-common-utils/!svn/ver/2/trunk/tbnet/ChangeLog
+END
+COPYING
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/tb-common-utils/!svn/ver/2/trunk/tbnet/COPYING
+END
+Makefile.am
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/tb-common-utils/!svn/ver/2/trunk/tbnet/Makefile.am
+END
+autogen.sh
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/tb-common-utils/!svn/ver/2/trunk/tbnet/autogen.sh
+END
+NEWS
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/tb-common-utils/!svn/ver/2/trunk/tbnet/NEWS
+END
+README
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/tb-common-utils/!svn/ver/2/trunk/tbnet/README
+END

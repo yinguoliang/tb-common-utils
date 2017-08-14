@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svn/tb-common-utils/!svn/ver/14/trunk/tbsys
+END
+configure.ac
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/tb-common-utils/!svn/ver/2/trunk/tbsys/configure.ac
+END
+AUTHORS
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/tb-common-utils/!svn/ver/2/trunk/tbsys/AUTHORS
+END
+ChangeLog
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/tb-common-utils/!svn/ver/2/trunk/tbsys/ChangeLog
+END
+Makefile.am
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/tb-common-utils/!svn/ver/2/trunk/tbsys/Makefile.am
+END
+autogen.sh
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/tb-common-utils/!svn/ver/2/trunk/tbsys/autogen.sh
+END
+NEWS
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/tb-common-utils/!svn/ver/2/trunk/tbsys/NEWS
+END
+README
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/tb-common-utils/!svn/ver/2/trunk/tbsys/README
+END
