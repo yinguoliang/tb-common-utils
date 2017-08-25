@@ -51,7 +51,7 @@ namespace tair {
       if (!initialize()) {
          return;
       }
-
+      //启动线程
       if (thread_count > 0) {
          task_queue_thread.start();
          duplicate_task_queue_thread.start();
@@ -63,6 +63,7 @@ namespace tair {
       char spec[32];
       bool ret = true;
       if (ret) {
+         //启动服务单监听
          int port = TBSYS_CONFIG.getInt(TAIRSERVER_SECTION, TAIR_PORT, TAIR_SERVER_DEFAULT_PORT);
          sprintf(spec, "tcp::%d", port);
          if (transport.listen(spec, &streamer, this) == NULL) {
@@ -122,8 +123,25 @@ namespace tair {
 
       // packet_streamer
       streamer.setPacketFactory(&factory);
-
+      /*
+      *  PacketQueue::对线程的封装
+      */
       if (thread_count>0) {
+         
+         /*
+         *  task_queue_thread是PacketQueueThread实例
+         *  PacketQueueThread持有一个queue队列，且run方法启动之后，不停的读取queue中的消息，交给处理器处理
+         *  通过PacketQueueThread.setThreadParameter()可以设置处理器
+         *  （注意：PacketQueueThread并没有跟别人关联，也没有暴露自己的queue，如何往queue里面塞数据呢？）
+         *  （ 方法是外部直接调用PacketQueueThread.push等方法往queue里面塞数据）
+         *  （参考handleBatchPacket , handlePacket等方法）
+         */ 
+         /*
+         *   请求是消息驱动的，即：消息先存到queue中，然后线程遍历queue拿到消息，交给handler处理
+         *   这里有个问题：既然是异步处理的，那么如何返回给用户呢？
+         *   方法是：消息持有客户端的连接，参考base_packet数据结构, 其持有一个Connection对象实例
+         */
+         //第一个参数：线程数  第二个参数：消息处理器，见 handlePacket、handleBatchPacket
          task_queue_thread.setThreadParameter(thread_count, this, NULL);
          duplicate_task_queue_thread.setThreadParameter(thread_count, this, NULL);
          // m_duplicateTaskQueueThread should have m_threadCount * (server_copy_count-1) thread, but we do not know server_copy_count here
@@ -134,7 +152,7 @@ namespace tair {
       conn_manager = new tbnet::ConnectionManager(&transport, &streamer, this);
       conn_manager->setDefaultQueueLimit(0, 500);
 
-      transport.start();
+      transport.start();//启动监听
 
       // m_tairManager
       tair_mgr = new tair_manager();
@@ -144,8 +162,12 @@ namespace tair {
       }
 
       heartbeat.set_thread_parameter(this, &streamer, tair_mgr);
-
+      //请求处理器， request_processor重载了process方法，可以处理不同的数据报文
+      //注意：报文中有个opcode字段，标识自己是什么类型的报文，程序根据opcode来进行分发
+      //opcode对应的就是客户端不同的操作，比如put/get/remove等操作
       req_processor = new request_processor(tair_mgr, &heartbeat, conn_manager);
+      //同request_processor一样，也是处理一些请求的
+      //
       stat_prc = new stat_processor(tair_mgr, stat_mgr, flow_ctrl);
 
       return true;
@@ -259,6 +281,11 @@ namespace tair {
       switch (pcode) {
          case TAIR_REQ_PUT_PACKET:
          {
+            /*
+            *  将数据包交给req_processor来处理
+            *  remark: req_prodessor本身也不会处理，而是交给tair_manager来处理
+            *  tair_manager会根据配置文件，初始化底层的storage(根据配置文件选择mdb/fdb/rdb/ldb)            *  
+            */
             request_put *npacket = (request_put*)packet;
             ret = req_processor->process(npacket, send_return, stat.out);
             break;
@@ -673,7 +700,9 @@ char *parse_cmd_line(int argc, char *const argv[])
    }
    return config_file;
 }
-
+/*
+   tair入口
+*/
 int main(int argc, char *argv[])
 {
    // parse cmd

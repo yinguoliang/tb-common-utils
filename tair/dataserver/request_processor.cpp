@@ -44,6 +44,10 @@ namespace tair {
       }
 
       uint64_t target_server_id = 0;
+      /*
+        should_proxy应该是如果发生了数据迁移，那么在迁移的过程中，还会有客户端不断的往本机请求，
+        这些请求应该到新的机器上去，所以这里直接代理一下，将请求发往新机器
+      */
       if (tair_mgr->should_proxy(request->key, target_server_id))
       {
          rc = TAIR_RETURN_SHOULD_PROXY;
@@ -56,6 +60,10 @@ namespace tair {
       PROFILER_START("put operation start");
       plugin::plugins_root* plugin_root = NULL;
       PROFILER_BEGIN("do request plugin");
+      /*
+          ------插件是什么东东？？？？-------
+          估计是扩展tair功能用的吧，暂时略过
+      */
       int plugin_ret = tair_mgr->plugins_manager.do_request_plugins(plugin::PLUGIN_TYPE_SYSTEM,
                                                                     TAIR_REQ_PUT_PACKET, request->area, &(request->key), &(request->data), plugin_root);
       PROFILER_END();
@@ -65,6 +73,11 @@ namespace tair {
       }
       else {
          PROFILER_BEGIN("do put");
+         /*
+         *   将请求交给tair_manager
+         *   tair_manager是根据全局配置文件来初始化的
+         *   初始化的内容包括：存储器选择
+         */
          rc = tair_mgr->put(request->area, request->key, request->data, request->expired, request, heart_beat->get_client_version());
          PROFILER_END();
 

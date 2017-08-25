@@ -571,6 +571,10 @@
       // save into the storage engine
       bool version_care =  op_flag & TAIR_OPERATION_VERSION;
       PROFILER_BEGIN("put into storage");
+      /*
+      *  tair_manager将请求交给storage_manager
+      *  storage_manager是一个接口类
+      */
       rc = storage_mgr->put(bucket_number, mkey, value, version_care, expire_time);
       PROFILER_END();
 
